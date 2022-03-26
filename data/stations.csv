@@ -1,7 +1,27 @@
-water_name,station_name,common_id
-Crana,Tullyarvan,39003-ie
-Vichtbach,Mulartshütte,2824450000100-de
-Losse,Helsa,42960105-de
-Murg,Frauenfeld,2386-ch
-Wupper,Glüder,2736731000100-de
-Angerbach,Ratingen,2756500000100-de
+water_name,station_name,outlier_date,common_id
+Vichtbach,Mulartshütte,,2824450000100-de
+Losse,Helsa,,42960105-de
+Murg,Frauenfeld,,2386-ch
+Wupper,Glüder,,2736731000100-de
+Angerbach,Ratingen,,2756500000100-de
+Crana,Tullyarvan,2020-07-27 16:00:00.0,39003-ie
+Sieg,Betzdorf,2021-01-25 14:00:00.0,2720050000-de
+Schmeie,Ebingen,2021-05-27 15:00:00.0,auto-1003803
+Schmeie,Ebingen,2021-05-27 01:00:00.0,auto-1003803
+Schmeie,Ebingen,2021-06-01 04:00:00.0,auto-1003803
+Aghacashlaun,Aghacashlaun,2021-05-30 20:00:00.0,36022-ie
+Aghacashlaun,Aghacashlaun,2021-05-30 21:00:00.0,36022-ie
+Aghacashlaun,Aghacashlaun,2021-05-30 22:00:00.0,36022-ie
+Aghacashlaun,Aghacashlaun,2021-05-25 05:00:00.0,36022-ie
+Aghacashlaun,Aghacashlaun,2021-05-25 18:00:00.0,36022-ie
+Aghacashlaun,Aghacashlaun,2021-05-25 22:00:00.0,36022-ie
+Aghacashlaun,Aghacashlaun,2021-05-25 06:00:00.0,36022-ie
+Aghacashlaun,Aghacashlaun,2021-05-25 23:00:00.0,36022-ie
+Aghacashlaun,Aghacashlaun,2021-05-25 07:00:00.0,36022-ie
+Aghacashlaun,Aghacashlaun,2021-05-25 17:00:00.0,36022-ie
+Aghacashlaun,Aghacashlaun,2021-05-25 08:00:00.0,36022-ie
+Aghacashlaun,Aghacashlaun,2021-05-25 15:00:00.0,36022-ie
+Aghacashlaun,Aghacashlaun,2021-05-25 16:00:00.0,36022-ie
+Aghacashlaun,Aghacashlaun,2021-05-18 05:00:00.0,36022-ie
+Aghacashlaun,Aghacashlaun,2021-05-17 08:00:00.0,36022-ie
+Aghacashlaun,Aghacashlaun,2021-05-16 02:00:00.0,36022-ie
