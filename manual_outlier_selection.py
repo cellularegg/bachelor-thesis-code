@@ -1,10 +1,10 @@
 import json
 
-from dash import Dash, dcc, html
-from dash.dependencies import Input, Output
-import plotly.express as px
-import pandas as pd
 import numpy as np
+import pandas as pd
+import plotly.express as px
+from dash import Dash, dcc, html, callback_context
+from dash.dependencies import Input, Output
 
 app = Dash(__name__)
 
@@ -40,7 +40,6 @@ fig.update_layout(
         type="date"
     )
 )
-# fig.update_layout(yaxis_range=[38950, 39200])
 app.layout = html.Div([
     html.H1('Manual Outlier Selection'),
     dcc.Graph(
@@ -48,27 +47,45 @@ app.layout = html.Div([
         figure=fig
     ),
     html.Button('Refresh', id='refresh-btn', n_clicks=0),
-    html.Div([
-        dcc.Markdown("""
-        **Click Data**
+    html.Button('Prev <-', id='prev-btn', n_clicks=0),
+    html.Button('Next ->', id='next-btn', n_clicks=0),
 
-        Click on points in the graph.
-    """),
+    html.Div([
+        dcc.Markdown('Click Data:'),
         html.Pre(id='click-data'),
     ]),
 ])
 
 
 def toggle_outlier(timestamp: str):
-    # t = pd.to_datetime(timestamp)
     print(df.loc[(df['timestamp'] == timestamp), 'is_outlier'])
     print(np.invert(df.loc[(df['timestamp'] == timestamp), 'is_outlier']))
     df.loc[(df['timestamp'] == timestamp), 'is_outlier'] = np.invert(
         df.loc[(df['timestamp'] == timestamp), 'is_outlier'])
 
 
+outlier_idx = 0
+
+
+def set_cur_outlier(relative_pos: int = 1):
+    global outlier_idx
+    global cur_outlier
+    outlier_idx += relative_pos
+    if outlier_idx < 0:
+        outlier_idx = 0
+    if df.loc[df['is_outlier'] == True, 'timestamp'].shape[0] <= outlier_idx:
+        outlier_idx = 0
+    if df.loc[df['is_outlier'] == True, 'timestamp'].shape[0] > outlier_idx:
+        cur_outlier = df.loc[df['is_outlier'] == True, 'timestamp'].iloc[
+            outlier_idx]
+    else:
+        cur_outlier = None
+
+
+set_cur_outlier()
+
+
 @app.callback(
-    # Output('water-level-graph', 'figure'),
     Output('click-data', 'children'),
     Input('water-level-graph', 'clickData'))
 def display_click_data(clickData):
@@ -79,11 +96,13 @@ def display_click_data(clickData):
 
 @app.callback(
     Output('water-level-graph', 'figure'),
-    Input('refresh-btn', 'n_clicks'))
-def update_output(n_clicks):
+    Input('refresh-btn', 'n_clicks'),
+    Input('next-btn', 'n_clicks'),
+    Input('prev-btn', 'n_clicks'))
+def update_output(refresh_btn, next_btn, prev_btn):
+    changed_id = [p['prop_id'] for p in callback_context.triggered][0]
     fig = px.scatter(df, x='timestamp', y='water_level',
                      title=f'{common_id}', color='is_outlier')
-    df.to_parquet(f'./data/{common_id}_outliers_classified.parquet')
     fig.update_layout(
         xaxis=dict(
             rangeselector=dict(
@@ -94,10 +113,21 @@ def update_output(n_clicks):
             type="date"
         )
     )
-    # print(df.loc[df['is_outlier'] == False, 'water_level'].min())
     fig.update_layout(
         yaxis_range=[df.loc[df['is_outlier'] == False, 'water_level'].min() - 5,
-                     df.loc[df['is_outlier'] == False, 'water_level'].max() + 5])
+                     df.loc[
+                         df['is_outlier'] == False, 'water_level'].max() + 5])
+    if 'refresh-btn' in changed_id:
+        df.to_parquet(f'./data/{common_id}_outliers_classified.parquet')
+    elif 'next-btn' in changed_id:
+        set_cur_outlier(1)
+    elif 'prev-btn' in changed_id:
+        set_cur_outlier(-1)
+    if 'next-btn' in changed_id or 'prev-btn' in changed_id:
+        fig.update_layout(
+            xaxis_range=[cur_outlier - pd.Timedelta(5, 'D'),
+                         cur_outlier + pd.Timedelta(5, 'D')])
+
     return fig
 
 
