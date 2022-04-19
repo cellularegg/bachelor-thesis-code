@@ -11,7 +11,10 @@ app = Dash(__name__)
 stations_dict = pd.read_csv('./data/stations.csv').groupby(
     ['common_id']).first().to_dict('index')
 
-common_id = '2736731000100-de'
+common_id = '2386-ch'
+common_id = '39003-ie'
+common_id = '42960105-de'
+common_id = '36022-ie'
 # df = pd.read_parquet(f'data/raw/parquet/{common_id}.parquet')
 # df['water_level'] = df['value']
 # del df['value']
@@ -21,7 +24,7 @@ common_id = '2736731000100-de'
 # df.sort_values(by='timestamp', inplace=True)
 # df.reset_index(drop=True, inplace=True)
 # df.to_parquet(f'./data/{common_id}_outliers_classified.parquet')
-df = pd.read_parquet(f'./data/{common_id}_outliers_classified.parquet')
+df = pd.read_parquet(f'./data/classified_raw/{common_id}_outliers_classified.parquet')
 df.info()
 fig = px.scatter(df, x='timestamp', y='water_level', title=f'{common_id}',
                  color='is_outlier')
@@ -118,7 +121,7 @@ def update_output(refresh_btn, next_btn, prev_btn):
                      df.loc[
                          df['is_outlier'] == False, 'water_level'].max() + 5])
     if 'refresh-btn' in changed_id:
-        df.to_parquet(f'./data/{common_id}_outliers_classified.parquet')
+        df.to_parquet(f'./data/classified_raw/{common_id}_outliers_classified.parquet')
     elif 'next-btn' in changed_id:
         set_cur_outlier(1)
     elif 'prev-btn' in changed_id:
