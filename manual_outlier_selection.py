@@ -11,10 +11,12 @@ app = Dash(__name__)
 stations_dict = pd.read_csv('./data/stations.csv').groupby(
     ['common_id']).first().to_dict('index')
 
-common_id = '2386-ch'
-common_id = '39003-ie'
-common_id = '42960105-de'
-common_id = '36022-ie'
+# common_id = '2386-ch'
+# common_id = '39003-ie'
+# common_id = '42960105-de'
+# common_id = '36022-ie'
+# common_id = '2720050000-de'
+common_id = 'auto-1003803'
 # df = pd.read_parquet(f'data/raw/parquet/{common_id}.parquet')
 # df['water_level'] = df['value']
 # del df['value']
