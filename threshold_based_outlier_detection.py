@@ -71,17 +71,11 @@ stations_df = pd.read_csv('./data/stations.csv')
 stations_dict = stations_df.groupby(['common_id']).first().to_dict(
     'index')
 
-# df = pd.read_parquet(
-#         f'data/classified_raw/36022-ie_outliers_classified.parquet')
-# res = threshold_outlier_prediction(df, 3, True, 'mad-z-score')
 common_ids = ['36022-ie', '39003-ie', '2386-ch', '42960105-de',
               '2720050000-de']
-# common_ids = ['36022-ie']
-methods = ['median', 'mean', 'mad', 'z-score', 'mad-z-score']
-# methods = ['mad-z-score']
+methods = ['median', 'mean', 'mad', 'z-score', 'madn-z-score', 'delta-z-score']
 windows = [None] + list(range(2, 51))
 center_windows = [False, True]
-# regular
 for common_id in common_ids:
     print(
         f'{datetime.now().isoformat()} - Processing {common_id} (regular, not preprocessed)')
